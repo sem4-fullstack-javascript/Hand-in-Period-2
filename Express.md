@@ -55,3 +55,18 @@ app.listen(3000);
 **The Request Object**: The HTTP request object is created when a client makes a request to the Express app  
 **The Response Object**: The HTTP response object is created along with the request object
 
+# Middleware
+
+An Express application is essentially a stack of middleware which are executed in a pipeline (serially).
+
+A middleware is a function with access to the request object (req), the response object (res), and the next middleware in line in the request-response cycle of an Express application.
+
+Each middleware has the capacity to execute any code, make changes to the request and the reponse object, end the request-response cycle, and call the next middleware in the stack. Since middleware are executed serially, their order of inclusion is important.
+
+If the current middleware is not ending the request-response cycle, it is important to call next() to pass on the control to the next middleware, else the request will be left hanging.
+
+## Request Flow
+
+In an Express Application there is a single entry point for all the requests coming to the app—via app.js When an HTTP request arrives at our app, it goes through the stack of middlewares as sketched below.
+
+![The Express Middleware Stack](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQi-CsmZT4QLnOp6pUaKrYUL3qM1EJPpYlzinrnLGFjlh2apl_Y)
