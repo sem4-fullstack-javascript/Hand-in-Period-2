@@ -9,44 +9,46 @@ Express is a minimal and flexible Node.js web application framework that provide
 
 ## Installing
 
+[expressjs.com](https://expressjs.com/en/starter/installing.html)
+
 ### Creating an Express project manually
 
 - Create a folder somewhere on your system to hold you app, and open a command prompt in that folder
-- Do a npm init (for this demo select defaults for everything)
+- Do a `npm init` (for this demo select defaults for everything)
 - Open the generated package.json file and investigate the content
-- Do a npn install express --save (check you folder to see what you got, and also open package.json again)
+- Do a `npm install express --save` (check you folder to see what you got, and also open package.json again)
 - Add a file index.js (name declared in your package.json file) and add a minimalistic server as sketched here Hello World
 - Start the server like: npm start
 
 ### Creating an Express project with the Express Generator
 
-- Install the Express-generator: npm install express-generator -g
+- Install the Express-generator: `npm install express-generator -g`
 - Open a terminal and navigate to the folder where you wan't to place your project folder.
-- Do a express myApp -v=ejs Investigate the generated folder(s) and the node_modules folder
+- Do a `express myApp -v=ejs` Investigate the generated folder(s) and the node_modules folder
 - Details here
-- Do a npm install Investigate the node_modules folder
-- Start the server like this: set DEBUG=myapp:* & npm start
-- Or on Mac/linux: DEBUG=myapp:* npm start
+- Do a `npm install` Investigate the node_modules folder
+- Start the server like this: `set DEBUG=myapp:* & npm start`
+- Or on Mac/linux: `DEBUG=myapp:* npm start`
 
 ## Monitor for changes
 
 One utility tool you simply can't live without is nodemon. It will monitor for any changes in your source and automatically restart your server while you develop.  
-- Install it like: npm install nodemon or install it globally npm install -g nodemon.
+- Install it like: `npm install nodemon` or install it globally `npm install -g nodemon`.
 - Use it like (for an Express-generator generated project)
-- Windows: setDEBUG=myApp:*/ & nodemon ./bin/www
-- Mac/Linux: DEBUG=myapp:* nodemon ./bin/www
+- Windows: `setDEBUG=myApp:*/ & nodemon ./bin/www`
+- Mac/Linux: `DEBUG=myapp:* nodemon ./bin/www`
 
 ## A Minimal Express Application
 
 There are only three core components to an Express application, which makes it easy get started
 ```js
-var express = require('express');
-var app = express();
+const express = require('express')
+const app = express()
+const port = 3000
 
-app.get('/', function(req, res){
-  res.send('hello world');
-});
-app.listen(3000); 
+app.get('/', (req, res) => res.send('Hello World!'))
+
+app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 ```
 
 ## The Core Express Objects
@@ -70,3 +72,31 @@ If the current middleware is not ending the request-response cycle, it is import
 In an Express Application there is a single entry point for all the requests coming to the app—via app.js When an HTTP request arrives at our app, it goes through the stack of middlewares as sketched below.
 
 ![The Express Middleware Stack](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQi-CsmZT4QLnOp6pUaKrYUL3qM1EJPpYlzinrnLGFjlh2apl_Y)
+
+## Middlewares and Request Flow
+
+```js
+//Third-party middleware
+ app.use(bodyParser.urlencoded())
+
+ //Custom middleware
+   app.use(function (req, res, next) {
+   console.log('Time:', Date.now()+"Log all requests");
+   next();
+ });
+
+ //Route functions
+ app.all('/somePath',function(req,res){
+   console.log("Log on all request for /somePath (GET,POST, PUT, DELETE)")
+ })
+ app.get('/somePath', function(req, res){
+   res.send('This is a route');
+ });
+ app.post('/somePath', function(req, res){
+   //.. Do something with the request parameters
+ });
+
+ //Built-in middleware (the only one left in V4.x.x)
+ app.use(express.static('./public')); 
+```
+
