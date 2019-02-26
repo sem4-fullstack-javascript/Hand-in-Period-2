@@ -1,0 +1,57 @@
+# Express
+
+Express is a minimal and flexible Node.js web application framework that provides a robust set of features for web and mobile applications
+
+- Express is minimal because it does not come loaded with all sorts of functionality. Out of the box, it supports only the very basic features of a web framework.
+- Even the supported features are not all enabled by default, you have the option to pick and use, according to your needs.
+- The flexibility in Express comes from the use of middlewares and Node modules. Express middlewares and Node modules are pluggable JavaScript components, which make Express apps very modular, flexible, and extensible.
+- Express gives you complete access to the core Node APIs. Anything you can do with Node, you can do it with Express too. Express can be used to create very simple to very complex web apps.
+
+## Installing
+
+### Creating an Express project manually
+
+- Create a folder somewhere on your system to hold you app, and open a command prompt in that folder
+- Do a npm init (for this demo select defaults for everything)
+- Open the generated package.json file and investigate the content
+- Do a npn install express --save (check you folder to see what you got, and also open package.json again)
+- Add a file index.js (name declared in your package.json file) and add a minimalistic server as sketched here Hello World
+- Start the server like: npm start
+
+### Creating an Express project with the Express Generator
+
+- Install the Express-generator: npm install express-generator -g
+- Open a terminal and navigate to the folder where you wan't to place your project folder.
+- Do a express myApp -v=ejs Investigate the generated folder(s) and the node_modules folder
+- Details here
+- Do a npm install Investigate the node_modules folder
+- Start the server like this: set DEBUG=myapp:* & npm start
+- Or on Mac/linux: DEBUG=myapp:* npm start
+
+## Monitor for changes
+
+One utility tool you simply can't live without is nodemon. It will monitor for any changes in your source and automatically restart your server while you develop.  
+- Install it like: npm install nodemon or install it globally npm install -g nodemon.
+- Use it like (for an Express-generator generated project)
+- Windows: setDEBUG=myApp:*/ & nodemon ./bin/www
+- Mac/Linux: DEBUG=myapp:* nodemon ./bin/www
+
+## A Minimal Express Application
+
+There are only three core components to an Express application, which makes it easy get started
+```js
+var express = require('express');
+var app = express();
+
+app.get('/', function(req, res){
+  res.send('hello world');
+});
+app.listen(3000); 
+```
+
+## The Core Express Objects
+
+**The Application Object**: The Application object is an instance of Express, by convention represented by the variable named app. It is the main object of an Express app and the bulk of the functionality is built on it  
+**The Request Object**: The HTTP request object is created when a client makes a request to the Express app  
+**The Response Object**: The HTTP response object is created along with the request object
+
