@@ -1,4 +1,6 @@
-# Period-2
+<title>Period 2</title>
+
+# Node.js/Express
 
 ## ![Green](green.png) Why would you consider a Scripting Language as JavaScript as your Backend Platform?
 
@@ -38,7 +40,7 @@
 
 ## ![Green](green.png) Explain, preferably using an example, how you have deployed your node/Express applications, and which of the Express Production best practices you have followed
 
-## NoSQL, MongoDB and Mongoose
+# NoSQL, MongoDB and Mongoose
 
 ### ![Green](green.png) Explain, generally, what is meant by a NoSQL database
 
