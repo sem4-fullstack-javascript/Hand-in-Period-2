@@ -1,5 +1,3 @@
-<title>Period 2</title>
-
 # Node.js/Express
 
 ## ![Green](green.png) Why would you consider a Scripting Language as JavaScript as your Backend Platform?
