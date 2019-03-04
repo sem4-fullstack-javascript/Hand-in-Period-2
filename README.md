@@ -4,6 +4,7 @@
 
 ## ![Green](green.png) Why would you consider a Scripting Language as JavaScript as your Backend Platform?
 
+
 ## ![Green](green.png) Explain Pros & Cons in using Node.js + Express to implement your Backend compared to a strategy using, for example, Java/JAX-RS/Tomcat
 
 ## ![Yellow](yellow.png) Node.js uses a Single Threaded Non-blocking strategy to handle asynchronous task. Explain strategies to implement a Node.js based server architecture that still could take advantage of a multi-core Server
