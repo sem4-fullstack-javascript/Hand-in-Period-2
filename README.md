@@ -3,6 +3,7 @@
 ## ![Green](green.png) Why would you consider a Scripting Language as JavaScript as your Backend Platform?
 
 
+
 ## ![Green](green.png) Explain Pros & Cons in using Node.js + Express to implement your Backend compared to a strategy using, for example, Java/JAX-RS/Tomcat
 
 ## ![Yellow](yellow.png) Node.js uses a Single Threaded Non-blocking strategy to handle asynchronous task. Explain strategies to implement a Node.js based server architecture that still could take advantage of a multi-core Server
@@ -41,22 +42,22 @@
 
 # NoSQL, MongoDB and Mongoose
 
-### ![Green](green.png) Explain, generally, what is meant by a NoSQL database
+## ![Green](green.png) Explain, generally, what is meant by a NoSQL database
 
-### ![Green](green.png) Explain Pros & Cons in using a NoSQL database like MongoDB as your data store, compared to a traditional Relational SQL Database like MySQL
+## ![Green](green.png) Explain Pros & Cons in using a NoSQL database like MongoDB as your data store, compared to a traditional Relational SQL Database like MySQL
 
-### ![Green](green.png) Explain reasons to add a layer like Mongoose, on top on of a schema-less database like MongoDB
+## ![Green](green.png) Explain reasons to add a layer like Mongoose, on top on of a schema-less database like MongoDB
 
-### ![Green](green.png) Explain about indexes in MongoDB, how to create them, and demonstrate how you have used them
+## ![Green](green.png) Explain about indexes in MongoDB, how to create them, and demonstrate how you have used them
 
-### ![Green](green.png) Explain, using your own code examples, how you have used some of MongoDB's "special" indexes like TTL and 2dsphere
+## ![Green](green.png) Explain, using your own code examples, how you have used some of MongoDB's "special" indexes like TTL and 2dsphere
 
-### ![Green](green.png) Demonstrate, using a REST-API you have designed, how to perform all CRUD operations on a MongoDB
+## ![Green](green.png) Demonstrate, using a REST-API you have designed, how to perform all CRUD operations on a MongoDB
 
-### ![Green](green.png) Explain the benefits of using Mongoose, and demonstrate, using your own code, an example involving all CRUD operations
+## ![Green](green.png) Explain the benefits of using Mongoose, and demonstrate, using your own code, an example involving all CRUD operations
 
-### ![Green](green.png) Explain the “6 Rules of Thumb: Your Guide Through the Rainbow” as to how and when you would use normalization vs. denormalization
+## ![Green](green.png) Explain the “6 Rules of Thumb: Your Guide Through the Rainbow” as to how and when you would use normalization vs. denormalization
 
-### ![Green](green.png) Demonstrate, using your own code-samples, decisions you have made regarding → normalization vs denormalization
+## ![Green](green.png) Demonstrate, using your own code-samples, decisions you have made regarding → normalization vs denormalization
 
-### ![Green](green.png) Explain, using a relevant example, a full JavaScript backend including relevant test cases to test the REST-API (not on the production database)
+## ![Green](green.png) Explain, using a relevant example, a full JavaScript backend including relevant test cases to test the REST-API (not on the production database)
