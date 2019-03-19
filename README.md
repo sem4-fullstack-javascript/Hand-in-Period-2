@@ -109,11 +109,25 @@ The main heart of Node JS Processing model is “Event Loop”. If we understand
 
 ![Node JS Architecture – Single Threaded Event Loop](https://cdn.journaldev.com/wp-content/uploads/2015/04/NodeJS-Single-Thread-Event-Model-768x576.png)
 
-
-
 ## ![Green](green.png) Explain briefly how to deploy a Node/Express application including how to solve the following deployment problems:
 
+[Deploying Node.js app on digital ocean](https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-16-04)
+
 ### ![Green](green.png) Ensure that you Node-process restarts after a (potential) exception that closed the application
+
+If you start your server with [`forever`](https://github.com/nodejitsu/forever), you can use:
+```js
+process.on('uncaughtException', function (err) {
+console.log(err); //Send some notification about the error
+process.exit(1); });
+```
+and the `forever` will automatically restart the server
+```
+Express server listening on port 3000
+error: Forever detected script exited with code: 1
+error: Forever restarting script for 2 time
+Express server listening on port 3000
+```
 
 ### ![Green](green.png) Ensure that you Node-process restarts after a server (Ubuntu) restart
 
