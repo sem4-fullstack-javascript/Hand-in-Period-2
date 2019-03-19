@@ -199,6 +199,31 @@ Logging frameworks will also (generally) support writing to more than just stdou
 
 ## ![Green](green.png)  Demonstrate a system using application logging and ![Yellow](yellow.png) “coloured” debug statements
 
+Logging using Winston:
+```js
+const app = express()
+const winston = require('winston')
+const consoleTransport = new winston.transports.Console()
+const myWinstonOptions = {
+    transports: [consoleTransport]
+}
+const logger = new winston.createLogger(myWinstonOptions)
+
+function logRequest(req, res, next) {
+    logger.info(req.url)
+    next()
+}
+app.use(logRequest)
+
+function logError(err, req, res, next) {
+    logger.error(err)
+    next()
+}
+app.use(logError)
+```
+
+
+
 ## ![Green](green.png) Explain, using relevant examples, concepts related to testing a REST-API using Node/JavaScript + relevant packages
 
 ## ![Green](green.png) Explain, using relevant examples, the Express concept; middleware
