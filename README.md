@@ -168,7 +168,30 @@ if (cluster.isMaster) {
 
 ### ![Green](green.png) Ensure that you can run “many” node-applications on a single droplet on the same port (80)
 
+Can be done by implementing a reverse proxy i.e. nginx
+
 ## ![Green](green.png) Explain the difference between “Debug outputs” and application logging. What’s wrong with console.log(..) statements in our backend-code
+
+
+
+### Disadvantages of console
+
+One of the biggest disadvantages is that you can’t toggle logging on and off, not out of the box at least. You could wrap console and extend it to do this, but this is code you’ll have to write, and likely code that will have to overwrite the built-in console functions.
+
+You might want to turn off logging if you’re in a development environment vs a production environment. Or even if you’re just testing locally on your machine or VM, if you’ve got a ton of logging for debug purposes or otherwise, that can really clutter up your console and you might want to just test with logging disabled for a bit.
+
+Another disadvantage of console comes when you need to know log levels.
+
+While it already has what appear to be log levels (see below), these are really just functions that route to stdout and stderr without providing true log levels.
+```js
+console.log() --> writes to stdout
+console.debug() --> writes to stdout
+console.info() --> writes to stdout
+ 
+console.error() --> writes to stderr
+console.warn() --> writes to stderr
+```
+So in the Node console, you won’t be able to tell these logs apart unless you prepend a string with the level to the logs.
 
 ## ![Green](green.png)  Demonstrate a system using application logging and ![Yellow](yellow.png) “coloured” debug statements
 
