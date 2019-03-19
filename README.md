@@ -222,7 +222,31 @@ function logError(err, req, res, next) {
 app.use(logError)
 ```
 
+### Colored debug statements:
 
+The debug module has a great namespace feature that allows you to enable or disable debug functions in groups. It is very simple–you separate namespaces by colons, like this:
+```js
+debug('app:meta')('config loaded')
+debug('app:database')('querying db...');
+debug('app:database')('got results!', results);
+```
+Enable debug functions in Node by passing the process name via the DEBUG environment variable. The following would enable the database debug function but not meta:
+```
+$ DEBUG='app:database' node app.js
+```
+To enable both, list both names, separated by commas:
+```
+$ DEBUG='app:database,app:meta' node app.js
+```
+Alternately, use the asterisk wildcard character (*) to enable any debugger in that namespace. For example, the following enables any debug function whose name starts with “app:":
+```
+$ DEBUG='app:*' node app.js
+```
+You can get as granular as you want with debug namespaces…
+```
+debug('myapp:thirdparty:identica:auth')('success!');
+debug('myapp:thirdparty:twitter:auth')('success!');
+```
 
 ## ![Green](green.png) Explain, using relevant examples, concepts related to testing a REST-API using Node/JavaScript + relevant packages
 
