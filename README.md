@@ -83,6 +83,34 @@ Yet, you can’t choose a language or tool just because another super-successful
 
 ## ![Yellow](yellow.png) Node.js uses a Single Threaded Non-blocking strategy to handle asynchronous task. Explain strategies to implement a Node.js based server architecture that still could take advantage of a multi-core Server
 
+Node JS follows Single Threaded with Event Loop Model. Node JS Processing model mainly based on Javascript Event based model with Javascript callback mechanism.
+
+As Node JS follows this architecture, it can handle more and more concurrent client requests very easily.
+
+The main heart of Node JS Processing model is “Event Loop”. If we understand this, then it is very easy to understand the Node JS Internals.
+
+### Single Threaded Event Loop Model Processing Steps
+
+- Clients Send request to Web Server.
+- Node JS Web Server internally maintains a Limited Thread pool to provide services to the Client Requests.
+- Node JS Web Server receives those requests and places them into a Queue. It is known as “Event Queue”.
+- Node JS Web Server internally has a Component, known as “Event Loop”. Why it got this name is that it uses indefinite loop to receive requests and process them.
+- Event Loop uses Single Thread only. It is main heart of Node JS Platform Processing Model.
+- Even Loop checks any Client Request is placed in Event Queue. If no, then wait for incoming requests for indefinitely.
+- If yes, then pick up one Client Request from Event Queue
+    - Starts process that Client Request
+    - If that Client Request Does Not requires any Blocking IO
+    - Operations, then process everything, prepare response and send it back to client.
+    - If that Client Request requires some Blocking IO Operations like interacting with Database, File System, External Services then it will follow different approach
+        - Checks Threads availability from Internal Thread Pool
+        - Picks up one Thread and assign this Client Request to that thread.
+        - That Thread is responsible for taking that request, process it, perform Blocking IO operations, prepare response and send it back to the Event Loop
+        - Event Loop in turn, sends that Response to the respective Client.
+
+![Node JS Architecture – Single Threaded Event Loop](https://cdn.journaldev.com/wp-content/uploads/2015/04/NodeJS-Single-Thread-Event-Model-768x576.png)
+
+
+
 ## ![Green](green.png) Explain briefly how to deploy a Node/Express application including how to solve the following deployment problems:
 
 ### ![Green](green.png) Ensure that you Node-process restarts after a (potential) exception that closed the application
