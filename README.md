@@ -172,8 +172,6 @@ Can be done by implementing a reverse proxy i.e. nginx
 
 ## ![Green](green.png) Explain the difference between “Debug outputs” and application logging. What’s wrong with console.log(..) statements in our backend-code
 
-
-
 ### Disadvantages of console
 
 One of the biggest disadvantages is that you can’t toggle logging on and off, not out of the box at least. You could wrap console and extend it to do this, but this is code you’ll have to write, and likely code that will have to overwrite the built-in console functions.
@@ -192,6 +190,12 @@ console.error() --> writes to stderr
 console.warn() --> writes to stderr
 ```
 So in the Node console, you won’t be able to tell these logs apart unless you prepend a string with the level to the logs.
+
+### Logging frameworks
+
+Popular Node logging frameworks like Winston and Bunyan allow for log levels, easy toggling logs on and off based on environment, and sometimes (in the case of Winston) support for custom log levels that you as a developer can define.
+
+Logging frameworks will also (generally) support writing to more than just stdout/stderr
 
 ## ![Green](green.png)  Demonstrate a system using application logging and ![Yellow](yellow.png) “coloured” debug statements
 
