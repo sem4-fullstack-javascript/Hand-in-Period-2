@@ -131,6 +131,8 @@ Express server listening on port 3000
 
 ### ![Green](green.png) Ensure that you Node-process restarts after a server (Ubuntu) restart
 
+same as above
+
 ### ![Red](red.png) Ensure that you can take advantage of a multi-core system
 
 ### ![Green](green.png) Ensure that you can run “many” node-applications on a single droplet on the same port (80)
