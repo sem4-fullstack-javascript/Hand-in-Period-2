@@ -316,6 +316,25 @@ app.use(function (err, req, res, next) {
 
 ## ![Red](red.png) Explain, using relevant examples, how to implement sessions and the legal implications of doing this
 
+```js
+var cookieSession = require("cookie-session");
+app.use(
+	cookieSession({
+		name: "session",
+		secret: "I_should_never_be_visible_in_code",
+
+		// Cookie Options
+		maxAge: 30 * 60 * 1000 // 30 minutes
+	})
+);
+```
+Recital 30 of the GDPR states:  
+Natural persons may be associated with online identifiers provided by their devices, applications, tools and protocols, such as internet protocol addresses, cookie identifiers or other identifiers such as radio frequency identification tags.  
+This may leave traces which, in particular when combined with unique identifiers and other information received by the servers, may be used to create profiles of the natural persons and identify them.  
+In short: when cookies can identify an individual via their device, it is considered personal data.
+
+Not complying to the laws will result in severe punishment.
+
 ## ![Green](green.png) Compare the express strategy toward (server side) templating with the one you used with Java on second semester
 
 Both JSP and EJS uses tags to embed Java and JavaScript respectively in HTML code
