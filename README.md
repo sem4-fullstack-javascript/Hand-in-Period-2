@@ -318,7 +318,51 @@ app.use(function (err, req, res, next) {
 
 ## ![Green](green.png) Compare the express strategy toward (server side) templating with the one you used with Java on second semester
 
+Both JSP and EJS uses tags to embed Java and JavaScript respectively in HTML code
+
+JSP tags:
+- `<%!` Variable declaration or method definition `%>`
+- `<%=` Java valid expression `%>`
+- `<%` Pure Java code `%>`
+
+EJS tags:
+- `<%` 'Scriptlet' tag, for control-flow, no output
+- `<%_` ‘Whitespace Slurping’ Scriptlet tag, strips all whitespace before it
+- `<%=` Outputs the value into the template (HTML escaped)
+- `<%-` Outputs the unescaped value into the template
+- `<%#` Comment tag, no execution, no output
+- `<%%` Outputs a literal '<%'
+- `%>` Plain ending tag
+- `-%>` Trim-mode ('newline slurp') tag, trims following newline
+- `_%>` ‘Whitespace Slurping’ ending tag, removes all whitespace after it
+
 ## ![Green](green.png) Demonstrate a simple Server Side Rendering example using a technology of your own choice (pug, EJS, ..)
+
+Setting up route
+```js
+var express = require("express");
+var router = express.Router();
+router.get("/joke", function(req, res, next) {
+	let counter = req.session.jokeCounter;
+	counter++;
+	req.session.jokeCounter = counter;
+	res.render("randomJoke", { title: "Joke", joke: jokes.getRandomJoke() });
+});
+```
+Rendering the site
+```js
+<!DOCTYPE html>
+<html>
+    <head>
+        <title><%= title %></title>
+        <link rel='stylesheet' href='/stylesheets/style.css' />
+    </head>
+    <body>
+        <a href='/'>Home Page</a>
+        <p><%= joke %></p>
+    </body>
+</html>
+```
 
 ## ![Green](green.png) Explain, using relevant examples, your strategy for implementing a REST-API with Node/Express and show how you can "test" all the four CRUD operations programmatically using, for example, the Request package
 
