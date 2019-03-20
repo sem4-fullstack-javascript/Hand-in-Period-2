@@ -144,25 +144,25 @@ const http = require('http');
 const numCPUs = require('os').cpus().length;
 
 if (cluster.isMaster) {
-  console.log(`Master ${process.pid} is running`);
+    console.log(`Master ${process.pid} is running`);
 
-  // Fork workers.
-  for (let i = 0; i < numCPUs; i++) {
-    cluster.fork();
-  }
+    // Fork workers.
+    for (let i = 0; i < numCPUs; i++) {
+        cluster.fork();
+    }
 
-  cluster.on('exit', (worker, code, signal) => {
-    console.log(`worker ${worker.process.pid} died`);
-  });
+    cluster.on('exit', (worker, code, signal) => {
+        console.log(`worker ${worker.process.pid} died`);
+    });
 } else {
-  // Workers can share any TCP connection
-  // In this case it is an HTTP server
-  http.createServer((req, res) => {
-    res.writeHead(200);
-    res.end('hello world\n');
-  }).listen(8000);
+    // Workers can share any TCP connection
+    // In this case it is an HTTP server
+    http.createServer((req, res) => {
+        res.writeHead(200);
+        res.end('hello world\n');
+    }).listen(8000);
 
-  console.log(`Worker ${process.pid} started`);
+    console.log(`Worker ${process.pid} started`);
 }
 ```
 
@@ -185,7 +185,7 @@ While it already has what appear to be log levels (see below), these are really 
 console.log() --> writes to stdout
 console.debug() --> writes to stdout
 console.info() --> writes to stdout
- 
+
 console.error() --> writes to stderr
 console.warn() --> writes to stderr
 ```
@@ -283,7 +283,36 @@ It is important to note that arrow functions should not be used with mocha, due 
 
 ## ![Green](green.png) Explain, using relevant examples, the Express concept; middleware
 
+A middleware with no mount path will be executed every time the app recieves a request
+```js
+var app = express()
 
+app.use(function (req, res, next) {
+	console.log('Time:', Date.now())
+    next()
+})
+```
+A middleware function mounted on a path. The function is executed for any type of HTTP request on the path.
+```js
+app.use('/user/:id', function (req, res, next) {
+	console.log('Request Type:', req.method)
+	next()
+})
+```
+A middleware function mounted on a path. The function is executed for HTTP requests with method GET on the path.
+```js
+app.get('/user/:id', function (req, res, next) {
+    console.log('ID:', req.params.id)
+    next()
+})
+```
+Error-handling middleware
+```js
+app.use(function (err, req, res, next) {
+	console.error(err.stack)
+	res.status(500).send('Something broke!')
+})
+```
 
 ## ![Red](red.png) Explain, using relevant examples, how to implement sessions and the legal implications of doing this
 
