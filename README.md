@@ -288,15 +288,15 @@ A middleware with no mount path will be executed every time the app recieves a r
 var app = express()
 
 app.use(function (req, res, next) {
-	console.log('Time:', Date.now())
+    console.log('Time:', Date.now())
     next()
 })
 ```
 A middleware function mounted on a path. The function is executed for any type of HTTP request on the path.
 ```js
 app.use('/user/:id', function (req, res, next) {
-	console.log('Request Type:', req.method)
-	next()
+    console.log('Request Type:', req.method)
+    next()
 })
 ```
 A middleware function mounted on a path. The function is executed for HTTP requests with method GET on the path.
@@ -309,8 +309,8 @@ app.get('/user/:id', function (req, res, next) {
 Error-handling middleware
 ```js
 app.use(function (err, req, res, next) {
-	console.error(err.stack)
-	res.status(500).send('Something broke!')
+    console.error(err.stack)
+    res.status(500).send('Something broke!')
 })
 ```
 
@@ -319,13 +319,13 @@ app.use(function (err, req, res, next) {
 ```js
 var cookieSession = require("cookie-session");
 app.use(
-	cookieSession({
-		name: "session",
-		secret: "I_should_never_be_visible_in_code",
+    cookieSession({
+        name: "session",
+        secret: "I_should_never_be_visible_in_code",
 
-		// Cookie Options
-		maxAge: 30 * 60 * 1000 // 30 minutes
-	})
+        // Cookie Options
+        maxAge: 30 * 60 * 1000 // 30 minutes
+    })
 );
 ```
 Recital 30 of the GDPR states:  
@@ -362,10 +362,10 @@ Setting up route
 var express = require("express");
 var router = express.Router();
 router.get("/joke", function(req, res, next) {
-	let counter = req.session.jokeCounter;
-	counter++;
-	req.session.jokeCounter = counter;
-	res.render("randomJoke", { title: "Joke", joke: jokes.getRandomJoke() });
+    let counter = req.session.jokeCounter;
+    counter++;
+    req.session.jokeCounter = counter;
+    res.render("randomJoke", { title: "Joke", joke: jokes.getRandomJoke() });
 });
 ```
 Rendering the site
@@ -385,9 +385,154 @@ Rendering the site
 
 ## ![Green](green.png) Explain, using relevant examples, your strategy for implementing a REST-API with Node/Express and show how you can "test" all the four CRUD operations programmatically using, for example, the Request package
 
+Implementing a REST-API with Express
+```js
+var express = require("express");
+var router = express.Router();
+var jokes = require("../model/jokes");
+
+/* GET home page. */
+router.get("/", function(req, res, next) {
+    res.render("index", { title: "Express", userName: req.session.userName });
+});
+
+router.get("/login", function(req, res, next) {
+    res.render("login", { title: "Login" });
+});
+
+router.post("/login", function(req, res, next) {
+    res.render("index", { title: "Express" });
+});
+
+router.get("/joke", function(req, res, next) {
+    let counter = req.session.jokeCounter;
+    counter++;
+    req.session.jokeCounter = counter;
+    res.render("randomJoke", { title: "Joke", joke: jokes.getRandomJoke() });
+});
+
+router.get("/jokes", function(req, res, next) {
+    let counter = req.session.jokesCounter;
+    counter++;
+    req.session.jokesCounter = counter;
+    res.render("allJokes", { title: "Jokes", jokes: jokes.getAllJokes() });
+});
+
+router.get("/addjoke", function(req, res, next) {
+    res.render("addJoke", { title: "Add Joke" });
+});
+
+router.post("/storejoke", function(req, res, next) {
+    let counter = req.session.storeJokeCounter;
+    counter++;
+    req.session.storeJokeCounter = counter;
+
+    const joke = req.body.joke;
+
+    jokes.addJoke(joke);
+
+    res.render("addJoke", { title: "Add Joke" });
+});
+
+module.exports = router;
+```
+Testing the REST-API
+```js
+const expect = require("chai").expect;
+const http = require('http');
+const app = require('../app');
+const fetch = require("node-fetch");
+const TEST_PORT = 3344;
+const URL = `http://localhost:${TEST_PORT}/api`;
+const jokes = require("../model/jokes");
+let server;
+describe("Verify the Joke API", function() {
+    before(function(done){
+        server = http.createServer(app);
+        server.listen(TEST_PORT,()=>{
+            console.log("Server Started")
+            done()
+        })
+    })
+    after(function(done){
+        server.close();
+        done();
+    })
+    beforeEach(function(){
+        jokes.setJokes(["aaa","bbb","ccc"])
+    })
+    it("Should add the joke 'ddd",async function(){
+        var init = {
+            method: "POST",
+            headers : {"content-type": "application/json"},
+            body : JSON.stringify({joke: "ddd"})
+        }
+        await fetch(URL+"/addjoke",init).then(r => r.json());
+        //Verify result
+        expect(jokes.getAllJokes()).lengthOf(4);
+        expect(jokes.getAllJokes()).to.include("ddd")
+    })
+}
+``` 
+
 ## ![Green](green.png) Explain, using relevant examples, about testing JavaScript code, relevant packages (Mocha etc.) and how to test asynchronous code
 
+We can test our code with Mocha, and we can make the asserts more readable with Chai's expect
+```js
+const expect = require("chai").expect;
+const calc = require("../calc");
+describe("Calculator API", function() {
+	describe("Testing the basic Calc API", function() {
+		it("4 + 3 should return 7", function() {
+			const res = calc.add(4, 3);
+			expect(res).to.be.equal(7);
+		});
+		it("4 - 3 should return 1", function() {
+			const res = calc.subtract(4, 3);
+			expect(res).to.be.equal(1);
+		});
+		it("4 * 3 should return 12", function() {
+			const res = calc.muliply(4, 3);
+			expect(res).to.be.equal(12);
+		});
+		it("9 / 3 should return 7", function() {
+			const res = calc.divide(9, 3);
+			expect(res).to.be.equal(3);
+		});
+		it("4 / 0 should throw error", function() {
+			expect(() => calc.divide(4, 0)).to.throw(/Attempt to divide by zero/);
+		});
+    });
+});
+```
+Testing asynchronous code
+```js
+const expect = require("chai").expect;
+const calc = require("../calc");
+const fetch = require("node-fetch");
+const PORT = 2345;
+const URL = `http://localhost:${PORT}/api/calc/`;
+let server;
+describe("Testing the REST Calc API", function() {
+    before(function(done) {
+        calc.calcServer(PORT, function(s) {
+            server = s;
+            done();
+        });
+    });
+    //testing asynchronous code
+    it("4 + 3 should return 7", async function() {
+        const res = await fetch(URL + "add/4/3").then(r => r.text());
+        expect(res).to.be.equal("7");
+    });
+    after(function() {
+        server.close();
+    });
+});
+```
 ## ![Red](red.png) Explain, using relevant examples, different ways to mock out databases, HTTP-request etc.
+
+
 
 ## ![Green](green.png) Explain, preferably using an example, how you have deployed your node/Express applications, and which of the Express Production best practices you have followed
 
