@@ -250,7 +250,40 @@ debug('myapp:thirdparty:twitter:auth')('success!');
 
 ## ![Green](green.png) Explain, using relevant examples, concepts related to testing a REST-API using Node/JavaScript + relevant packages
 
+We can test our code with `mocha`, and use `chai`'s `expect` to make our tests more readable.
+```js
+const expect = require("chai").expect;
+describe("Calculator API", function() {
+	describe("Testing the basic Calc API", function() {
+		it("9 / 3 should return 7", function() {
+      expect(calc.divide(9, 3)).to.be.equal(3);
+		});
+		it("4 / 0 should throw error", function() {
+      expect(() => calc.divide(4, 0)).to.throw(/Attempt to divide by zero/);
+		});
+  });
+  describe("Testing the REST Calc API", function() {
+		before(function(done) {
+			calc.calcServer(PORT, function(s) {
+				server = s;
+				done();
+			});
+		});
+		it("4 + 3 should return 7", async function() {
+			const res = await fetch(URL + "add/4/3").then(r => r.text());
+			expect(res).to.be.equal("7");
+		});
+		after(function() {
+			server.close();
+		});
+	});
+});
+```
+It is important to note that arrow functions should not be used with mocha, due to the behavior of this and will not be able to access the mocha context
+
 ## ![Green](green.png) Explain, using relevant examples, the Express concept; middleware
+
+
 
 ## ![Red](red.png) Explain, using relevant examples, how to implement sessions and the legal implications of doing this
 
