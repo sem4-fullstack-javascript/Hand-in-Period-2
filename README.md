@@ -532,7 +532,26 @@ describe("Testing the REST Calc API", function() {
 ```
 ## ![Red](red.png) Explain, using relevant examples, different ways to mock out databases, HTTP-request etc.
 
-
+We can use `nock` to mock a website
+```js
+const nock = require('nock');
+describe("loadWiki()", function() {
+    before(function() {
+        //the website to be mocked
+        nock("https://en.wikipedia.org")
+            //the HTTP method and the path
+            .get("/wiki/Abraham_Lincoln")
+            //the response the mocked website should send
+            .reply(200, "Mock Abraham Lincoln Page");
+    });
+    it("Load Abraham Lincoln's wikipedia page", function(done) {
+        tools.loadWiki({ first: "Abraham", last: "Lincoln"}, function(html) {
+            expect(html).to.equal("Mock Abraham Lincoln Page");
+            done();
+        });
+    });
+});
+```
 
 ## ![Green](green.png) Explain, preferably using an example, how you have deployed your node/Express applications, and which of the Express Production best practices you have followed
 
@@ -553,6 +572,20 @@ describe("Testing the REST Calc API", function() {
 ## ![Green](green.png) Explain the benefits of using Mongoose, and demonstrate, using your own code, an example involving all CRUD operations
 
 ## ![Green](green.png) Explain the “6 Rules of Thumb: Your Guide Through the Rainbow” as to how and when you would use normalization vs. denormalization
+
+rule 1 Favor embedding unless there is a compelling reason not to.
+
+rule 2 Needing to access an object on its own is a compelling reason not to embed it.
+
+rule 3 Arrays should not grow without bound. If there are more than a couple of hundred documents on the “many” side, don’t embed them; if there are more than a few thousand documents on the “many” side, don’t use an array of ObjectID references. High-cardinality arrays are a compelling reason not to embed.
+
+rule 4 Don’t be afraid of application-level joins: if you index correctly and use the projection specifier (as shown in part 2) then application-level joins are barely more expensive than server-side joins in a relational database.
+
+rule 5 Consider the write/read ratio when denormalizing. A field that will mostly be read and only seldom updated is a good candidate for denormalization: if you denormalize a field that is updated frequently then the extra work of finding and updating all the instances is likely to overwhelm the savings that you get from denormalizing.
+
+rule 6 As always with MongoDB, how you model your data depends – entirely – on your particular application’s data access patterns. You want to structure your data to match the ways that your application queries and updates it.
+
+reference [6 Rules of Thumb](https://www.mongodb.com/blog/post/6-rules-of-thumb-for-mongodb-schema-design-part-3)
 
 ## ![Green](green.png) Demonstrate, using your own code-samples, decisions you have made regarding → normalization vs denormalization
 
