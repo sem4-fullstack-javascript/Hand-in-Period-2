@@ -555,21 +555,71 @@ describe("loadWiki()", function() {
 
 ## ![Green](green.png) Explain, preferably using an example, how you have deployed your node/Express applications, and which of the Express Production best practices you have followed
 
+I would use nginx, i would disable `console.log` statements, and i would add logging
+
 # NoSQL, MongoDB and Mongoose
 
 ## ![Green](green.png) Explain, generally, what is meant by a NoSQL database
 
+A NoSQL database, is a database that isn't a SQL database
+
 ## ![Green](green.png) Explain Pros & Cons in using a NoSQL database like MongoDB as your data store, compared to a traditional Relational SQL Database like MySQL
+
+It is very fast to read data as you often avoid have to join tables. But it can also be slower to update because of the database is denormalized.
 
 ## ![Green](green.png) Explain reasons to add a layer like Mongoose, on top on of a schema-less database like MongoDB
 
-## ![Green](green.png) Explain about indexes in MongoDB, how to create them, and demonstrate how you have used them
+Since MongoDB on its own is schemaless, which can cause some troubles, using a layer on top like mongoose makes it possible also to reference documents in other collections inside a document.
 
-## ![Green](green.png) Explain, using your own code examples, how you have used some of MongoDB's "special" indexes like TTL and 2dsphere
+## These two topics will be introduced in period-3
+
+### ![Green](green.png) Explain about indexes in MongoDB, how to create them, and demonstrate how you have used them
+
+Waiting for flow3 to answer this...
+
+### ![Green](green.png) Explain, using your own code examples, how you have used some of MongoDB's "special" indexes like TTL and 2dsphere
+
+Waiting for flow3 to answer this...
 
 ## ![Green](green.png) Demonstrate, using a REST-API you have designed, how to perform all CRUD operations on a MongoDB
 
+```js
+const User = require("../models/user")
+
+
+async function addUser(user) {
+    return await User.create(user)
+}
+
+async function addJobToUser(userId, job) { 
+    return await User.findByIdAndUpdate(userId, {
+        $push: {
+            job
+        }
+    }, {new: true})
+}
+
+async function getAllUsers() {
+    return await User.find({})
+}
+
+async function findByUserName(userName) {
+    return await User.findOne({
+        userName
+    })
+}
+
+module.exports = {
+    addUser,
+    addJobToUser,
+    getAllUsers,
+    findByUserName
+}
+```
+
 ## ![Green](green.png) Explain the benefits of using Mongoose, and demonstrate, using your own code, an example involving all CRUD operations
+
+Explained earlier
 
 ## ![Green](green.png) Explain the “6 Rules of Thumb: Your Guide Through the Rainbow” as to how and when you would use normalization vs. denormalization
 
@@ -589,4 +639,100 @@ reference [6 Rules of Thumb](https://www.mongodb.com/blog/post/6-rules-of-thumb-
 
 ## ![Green](green.png) Demonstrate, using your own code-samples, decisions you have made regarding → normalization vs denormalization
 
+```js
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+
+let JobSchema = new Schema({
+    type: String,
+    company: String,
+    companyUrl: String
+});
+
+let UserSchema = new Schema({
+    firstName: String,
+    lastName: String,
+    userName: {
+        type: String,
+        unique: true,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    job: [JobSchema],
+    created: {
+        type: Date,
+        default: Date.now
+    },
+    lastUpdated: Date
+});
+```
+a user have a one-to-few job. therefore we have embedded the job data into user
+
 ## ![Green](green.png) Explain, using a relevant example, a full JavaScript backend including relevant test cases to test the REST-API (not on the production database)
+
+Explained earlier
+
+the testing of the database could look like this:
+```js
+const assert = require("assert")
+const blogFacade = require("../facade/blogFacade")
+const LocationBlog = require("../models/LocationBlog")
+const User = require("../models/User")
+
+const connect = require("../dbConnect")
+connect(require("../settings").TEST_DB_URI);
+
+describe("LocationBlogFacade", function () {
+    var testUser1
+    var testBlog1
+
+    beforeEach(async function () {
+        testUser1 = new User(
+            {
+                firstName: "Jenne",
+                lastName: "Teste",
+                userName: "jenn",
+                password: "1234",
+                email: "jenn@",
+            })
+        await testUser1.save()
+
+        testBlog1 = new LocationBlog({
+            info: "Very Nice blog i wrote here",
+            pos: { longitude: 22, latitude: 23 },
+            author: testUser1
+        })
+        await testBlog1.save()
+    })
+
+    afterEach(async function () {
+        await User.deleteMany({})
+        await LocationBlog.deleteMany({})
+    })
+
+    it("should should add the locationblog", async function () {
+        const blog = await blogFacade.addLocationBlog("Nice blog i wrote here", { longitude: 24, latitude: 23 }, testUser1)
+        assert.equal(blog.author, testUser1)
+    })
+
+
+    it("should add the user to the liked list", async function () {
+        const blog = await blogFacade.likeLocationBlog(testBlog1, testUser1)
+        assert.ok(blog.likedBy[0].equals(testUser1))
+    })
+
+    it("should not be able to have the same user to like twice", async function () {
+        const blog = await blogFacade.likeLocationBlog(testBlog1, testUser1)
+        await blogFacade.likeLocationBlog(blog, testUser1)
+        assert.equal(blog.likedByCount, 1) 
+    })
+})
+```
